@@ -29,6 +29,8 @@ been deposited with the U.S. Copyright Office.
 		<echo message="Demo."/>
 		<echo message="Package Dir.${devOpsPackage.dir}"/>
 		<echo message="ftp server.${ftp-to-server}"/>
+		<echo message="PROJECT_NAME.${PROJECT_NAME}"/>
+		<echo message="BUILD_NUMBER.${BUILD_NUMBER}"/>
 	</target>
 
   	<target name="create-db2-package-for-deploy"  >

@@ -1,85 +1,9 @@
-<project name="gcs" default="">
-<!--
-===========================================================================
+<project name="test" default="">
 
-IBM Confidential
 
-Copyright IBM Corp. 2007, 2006
-
-The source code for this program is not published or otherwise
-divested of its trade secrets, irrespective of what has
-been deposited with the U.S. Copyright Office.
-===========================================================================
--->
-
-	<description>Deploys GCS DB2 Package on UCD Server</description>
- 
- 	<!-- set global properties for this build -->
-	<property file="Db2DevOpsBuild.properties"/>
-	
-	<property name="ftp-to-server"  value="mkmbz4228.cloud.dst.ibm.com" />
-
-	<target name="build">
-		<antcall target="check-DataRequest-ID"/>
-		<antcall target="clean-package"/> 
-		<antcall target="create-db2-package-for-deploy"/>
-		<antcall target="CopyGCSDB2PackageToDeploy"/>
-	</target>
 	<target name="demo">
 		<echo message="Demo."/>
-		<echo message="Package Dir.${devOpsPackage.dir}"/>
-		<echo message="ftp server.${ftp-to-server}"/>
-		<echo message="PROJECT_NAME.$PROJECT_NAME"/>
-		<echo message="BUILD_NUMBER.$BUILD_NUMBER"/>
-	</target>
-
-  	<target name="create-db2-package-for-deploy"  >
-		<!-- Copy Data Request Package to deploy Directory.-->	
-		<copy todir="${devOpsPackage.dir}/GCSDB2Deploy">
-			<fileset dir="${db.DataRequestBasePath}/${BuildDataRequest}">
-			 <include name="**/*.txt"/>
-			 <include name="**/*.ksh"/>
-			 <include name="**/*.sql"/>
-			</fileset>
-		</copy>
-	</target>  
-
-	<target name="CopyGCSDB2PackageToDeploy">
-		<mkdir dir="${devOpsPackage.dir}/${buildLabel}" />
-			<tar destfile="${devOpsPackage.dir}/${buildLabel}/${buildLabel}_Package.tar">
-				<tarfileset dir="${devOpsPackage.dir}/GCSDB2Deploy">
-				</tarfileset>
-			</tar>
-			<if>
-				<equals arg1= "${autoDeploy}" arg2 = "true" casesensitive = "No"/>
-				<then>
-					<ssh host="${ftp-to-server}" username="${ftp-user}" password="${ftp-password}" version="2">
-						<sftp umask="077"  action="mkdir" remotedir="/GCS/database/${buildLabel}"/>
-						<sftp remotedir="/GCS/database/${buildLabel}">
-						<fileset dir="${devOpsPackage.dir}/${buildLabel}"/>
-						</sftp>
-					</ssh>
-				</then>
-				<else>
-					<echo message="Auto Deploy Disabled. Package needs to be manually copied."/>
-				</else>
-			</if>	
-	</target>
-	<target name="clean-package">	
 		
-		<delete includeEmptyDirs="true">
-					<fileset dir="${devOpsPackage.dir}/GCSDB2Deploy/" includes="**/*" />
-		</delete>
 	</target>
-	<target name="check-DataRequest-ID">
-		<if>
-		<equals arg1= "${BuildDataRequest}" arg2 = "XXXXXXX" casesensitive = "No"/>
-			<then>
-				<fail message="Please provide Data Request Id for generating the package."/>
-			</then>
-			<else>
-				<echo message="Generating the database package."/>
-			</else>
-		</if>	
-	</target> 
+ 
 </project>
